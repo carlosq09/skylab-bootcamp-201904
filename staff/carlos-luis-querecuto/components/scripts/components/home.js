@@ -1,36 +1,39 @@
 'use strict';
 
-function Home(container, onSearch, onDetails) {
-    Component.call(this, container);
+class Home extends Component{
+    constructor(container, onSearch, onDetails, onLogout){
+        super(container);
 
-    var form = this.container.children[1];
-    new Search(form, onSearch);
+        const logout = this.container.children[0];
+    
+        logout.addEventListener('click', function(event) {
+            event.preventDefault();
+    
+            onLogout();
+        });
 
-    var ul = this.container.children[2];
-    var results = new Results(ul, onDetails);
-    this.__results__ = results;
+        const form = this.container.children[2];
+        new Search(form, onSearch);
+    
+        const ul = this.container.children[3];
+        const results = new Results(ul, onDetails);
+        this.__results__ = results;
+    
+        const article = this.container.children[4];
+        const detail = new Details(article);
+        this.__detail__ = detail;  
 
-    var article = this.container.children[3];
-    var detail = new Details(article);
-    this.__detail__ = detail;
-}
+    }
 
-Home.prototype = Object.create(Component.prototype);
-Home.prototype.constructor = Home;
-
-Object.defineProperty(Home.prototype, 'results', {
-    set: function(results) {
+    set results(results){
         this.__detail__.visible = false;
         this.__results__.items = results;
         this.__results__.visible = true;
-        
     }
-})
 
-Object.defineProperty(Home.prototype, 'detail', {
-    set: function (detail) {
+    set detail(detail){
         this.__results__.visible = false;       
         this.__detail__.item = detail;
         this.__detail__.visible = true;
     }
-});
+}

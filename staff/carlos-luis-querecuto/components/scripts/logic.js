@@ -11,7 +11,7 @@ var logic = {
             var error = TypeError(surname + ' is not a valid surname');
             error.code = 3;
             throw error;
-        } 
+        }
         if (typeof email !== 'string') {
             var error = TypeError(email + ' is not a valid email');
             error.code = 4;
@@ -73,7 +73,7 @@ var logic = {
 
         xhr.send();
     },
-    
+
     retrieveUser: function (email) {
         // TODO validate input
 

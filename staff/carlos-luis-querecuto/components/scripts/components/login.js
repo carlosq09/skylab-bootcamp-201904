@@ -9,40 +9,34 @@
  * @param {*} defaultLanguage 
  * @param {Function} onLanguageChange The callback invoked on language change.
  */
-function Login(form, onLogin, literals, defaultLanguage, onLanguageChange) {
-    Component.call(this, form);
 
-    this.__literals__ = literals;
-    this.__onLanguageChange__ = onLanguageChange;
+class Login extends Component {
+    constructor(form, onLogin, literals, defaultLanguage, onLanguageChange){
+        super(form);
 
-    var feedback = new Feedback(this.container.children[3]);
-    feedback.visible = false;
-    this.__feedback__ = feedback;
-
-    this.language = defaultLanguage;
-
-    this.onLogin = onLogin;
-}
-
-Login.prototype = Object.create(Component.prototype);
-Login.prototype.constructor = Login;
-
-Object.defineProperty(Login.prototype, 'onLogin', {
-    set: function (callback) {
+        this.__literals__ = literals;
+        this.__onLanguageChange__ = onLanguageChange;
+    
+        const feedback = new Feedback(this.container.children[3]);
+        feedback.visible = false;
+        this.__feedback__ = feedback;
+    
+        this.language = defaultLanguage;
+    
+        this.onLogin = onLogin;
+    }
+    set onLogin(callback){
         this.container.addEventListener('submit', function (event) {
             event.preventDefault();
 
-            var email = this.email.value;
-            var password = this.password.value;
+            const email = this.email.value;
+            const password = this.password.value;
 
             callback(email, password);
         });
     }
-});
-
-Object.defineProperty(Login.prototype, 'language', {
-    set: function (language) {
-        var literals = this.__literals__[language];
+    set language(language){
+        const literals = this.__literals__[language];
 
         this.container.children[0].innerText = literals.title;
 
@@ -53,11 +47,10 @@ Object.defineProperty(Login.prototype, 'language', {
 
         if (this.__onLanguageChange__) this.__onLanguageChange__(language);
     }
-});
 
-Object.defineProperty(Login.prototype, 'error', {
-    set: function(error) {
+    set error(error){
         this.__feedback__.message = error;
         this.__feedback__.visible = true;
     }
-});
+
+}

@@ -1,9 +1,9 @@
 'use strict';
 
-var languageSelected = 'en';
+const languageSelected = 'en';
 
-var select = document.getElementsByTagName('select')[0];
-var languageSelector = new LanguageSelector(select, function (language) {
+const select = document.getElementsByTagName('select')[0];
+const languageSelector = new LanguageSelector(select, function (language) {
     languageSelected = language;
 
     landing.language = language;
@@ -11,20 +11,19 @@ var languageSelector = new LanguageSelector(select, function (language) {
     login.language = language;
 });
 
-var sections = document.getElementsByTagName('section');
+const sections = document.getElementsByTagName('section');
 
-var landing = new Landing(sections[0], i18n.landing, function() {
+const landing = new Landing(sections[0], i18n.landing, function() {
     landing.visible = false;
     register.visible = true;
 }, function() {
     landing.visible = false;
     login.visible = true;
 });
-landing.visible = false;
 
-var forms = document.getElementsByTagName('form');
+const forms = document.getElementsByTagName('form');
 
-var register = new Register(forms[0], function (name, surname, email, password) {
+const register = new Register(forms[0], function (name, surname, email, password) {
     logic.register(name, surname, email, password);
 
     register.visible = false;
@@ -32,10 +31,10 @@ var register = new Register(forms[0], function (name, surname, email, password) 
 }, i18n.register, languageSelected);
 register.visible = false;
 
-var login = new Login(forms[1], function (email, password) {
+const login = new Login(forms[1], function (email, password) {
     try {
         logic.login(email, password);
-        var user = logic.retrieveUser(email);
+        const user = logic.retrieveUser(email);
         login.visible = false;
         home.visible = true;
     } catch (error) {
@@ -46,14 +45,14 @@ var login = new Login(forms[1], function (email, password) {
 });
 login.visible = false;
 
-var registerOk = new RegisterOk(sections[1], function () {
+const registerOk = new RegisterOk(sections[1], function () {
     registerOk.visible = false;
     login.visible = true;
 });
 registerOk.visible = false;
 
-var main = document.getElementsByTagName('main')[0];
-var home = new Home(main, function(query) {
+const main = document.getElementsByTagName('main')[0];
+const home = new Home(main, query => {
     logic.searchDucks(query, function(ducks) {
         home.results = ducks.map(function(duck) {
             return {
@@ -76,7 +75,10 @@ function(id) {
             }
         }) 
     }
-);
-// home.visible = false;
+,function(){
+    home.visible = false;
+    landing.visible = true;
+});
+home.visible = false;
 
 
