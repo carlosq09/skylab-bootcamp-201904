@@ -1,7 +1,7 @@
-import logic from '.'
+import logic from './index2'
 import { LogicError, RequirementError, ValueError, FormatError } from '../common/errors'
 import userApi from '../data/user-api'
-import cocktail from '../data/cocktail-api';
+import cocktail from '../data/cocktail-api/index2';
 import { deepStrictEqual } from 'assert';
 import { isTSAnyKeyword, exportAllDeclaration } from '@babel/types';
 

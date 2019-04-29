@@ -1,4 +1,4 @@
-import cocktailApi from '../cocktail-api/index'
+import cocktailApi from './index2'
 
 
 
