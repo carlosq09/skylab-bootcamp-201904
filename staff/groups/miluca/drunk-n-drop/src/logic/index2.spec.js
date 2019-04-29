@@ -1,4 +1,4 @@
-import logic from '../logic'
+import logic from '.'
 import { LogicError, RequirementError, ValueError, FormatError } from '../common/errors'
 import userApi from '../data/user-api'
 import cocktail from '../data/cocktail-api';
@@ -127,10 +127,54 @@ describe('logic', () => {
             
             it('should clear session storage after log out', () => {
 
+                sessionStorage.setItem('bgcolor', 'red')
                 logic.logoutUser()
                 expect(sessionStorage.length).toBe(0);
 
             })
+
+        })
+
+
+        describe('retrieve favorites', () =>{
+
+            let id , token , _favs
+
+            beforeEach(()=> {
+                _favs = []
+
+                return cocktail.searchByingredient('lime')
+                .then (response => {
+                    
+                    const {drinks:[{idDrink}]} = response
+                 
+                    return userApi.create(email,password,{favorites : [idDrink]})
+                })
+                .then(response => {
+                    
+                    id= response.data.id
+                    return userApi.authenticate(email,password)
+                })
+                .then(response => {
+                    token = response.data.token
+
+                    logic.__userId__ = id
+                    logic.__userToken__ = token
+                })
+            })
+
+
+            it('should succed retiriving user favorites', () =>
+            
+            logic.retriveFavorites()
+                .then(response => {
+                    console.log(response)
+                    expect(response instanceof Array).toBeTruthy()
+
+                })
+            
+            )
+                 
 
         })
     })

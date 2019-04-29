@@ -1,31 +1,12 @@
 import normalize from '../common/normalize'
 import validate from '../common/validate'
 import userApi from '../data/user-api'
-import Cocktail from '../data/cocktail-api'
 import { LogicError } from '../common/errors'
+import cocktailApi from '../data/cocktail-api';
 
 
 const logic = {
 
-    set __userId__(id) {
-        sessionStorage.userId = id
-    },
-
-    get __userId__() {
-        return normalize.undefinedOrNull(sessionStorage.userId)
-    },
-
-    set __userToken__(token) {
-        sessionStorage.userToken = token
-    },
-
-    get __userToken__() {
-        return normalize.undefinedOrNull(sessionStorage.userToken)
-    },
-
-    get isUserLoggedIn() {
-        return !!(this.__userId__ && this.__userToken__)
-    },
 
 
     registerUser(name, email, password) {
@@ -49,8 +30,39 @@ const logic = {
         sessionStorage.clear()
     },
 
+    retriveFavorites(){
 
+        return userApi.retrieve(this.__userId__,this.__userToken__)
+        .then(response => {
+            const {status ,data } = response
 
+            if(status === 'OK'){
+                const {favorites = [] } = data
+
+                if(favorites.length){
+                    const calls = favorites.map(fav => {
+                       return cocktailApi.searchById(fav)
+                        .then(({drinks}) => {
+                            drinks.forEach(drink => {
+                                Object.keys(drink).forEach(key => {
+                                    if(drink[key] === null  || drink[key].trim() == '') {
+                                        delete drink[key]
+                                    } 
+                                })
+                            })
+                            return drinks[0]
+                        })
+                        
+                    })
+                    return Promise.all(calls)
+                
+                } else return favorites
+            }
+
+            throw new LogicError(response.error)
+        })
+
+    }
 }
 
 export default logic
