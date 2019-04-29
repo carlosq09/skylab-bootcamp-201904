@@ -141,7 +141,7 @@ describe('logic', () => {
             let id , token , _favs
 
             beforeEach(()=> {
-                _favs = []
+                
 
                 return cocktail.searchByingredient('lime')
                 .then (response => {
