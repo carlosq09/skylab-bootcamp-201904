@@ -46,6 +46,18 @@ const logic = {
                     this.__userToken__ = token
                 } else throw new LogicError(response.error)
             })
+    },
+
+    retrieveUser() {
+
+        return userApi.retrieve(this.__userId__, this.__userToken__)
+            .then(response => {
+                if(response.status === 'OK') {
+                    const {data: {username: email, name, favorites, creations}} = response
+ 
+                    return {email, name, favorites, creations}
+                } else throw new LogicError(response.error)
+            })
     }
 }
 

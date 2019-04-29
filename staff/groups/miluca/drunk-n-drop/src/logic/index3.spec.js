@@ -1,4 +1,4 @@
-import logic from '.'
+import logic from './index3'
 import { LogicError, RequirementError, ValueError, FormatError } from '../common/errors'
 import userApi from '../data/user-api'
 import cocktail from '../data/cocktail-api';
@@ -9,6 +9,8 @@ describe('logic', () => {
     const name = 'Miguel'
     let email
     let password = '1234'
+    let favorites = []
+    let creations = []
 
 
     beforeEach(() => {
@@ -111,7 +113,48 @@ describe('logic', () => {
         it('Should fail on blank password', () => {
             const password = `\t   \n`
             expect(() => logic.loginUser(email, password)).toThrowError(ValueError, `password is empty`)
-        })
-        
+        })        
     })
+
+    describe('retrieve user', () => {
+
+        let id, token
+
+        beforeEach(() =>
+            userApi.create(email, password, {name, favorites, creations}) 
+            .then(() => {
+                return userApi.authenticate(email, password)
+            })
+            .then(response => {
+                console.log(response)
+                id = response.data.id
+                token = response.data.token
+                logic.__userId__ = id
+                logic.__userToken__ = token
+            })
+        )
+
+        fit('Should succedd on correct user id and token', () => {
+            logic.retrieveUser()
+            .then(user => {
+                console.log(user.id)
+                expect(typeof user.id).toBe('undefined')
+                expect(user.name).toBe(name)
+                // expect(user.password).toBeUndefined()
+                expect(user.email).toBe(email)
+            })
+        })
+
+        fit('Should fail on incorrect id', () => {
+            logic.__userId__= '5cb9998f2e59ee0009AAc02c'
+            return logic.retrieveUser()
+                .then(() => {throw Error('should not reach this point') })
+                .catch(error => {
+                    expect(error).toBeDefined()
+                    expect(error instanceof LogicError).toBeTruthy()
+                    expect(error.message).toBe(`token id \"${id}\" does not match user \"${logic.__userId__}\"`)
+                })
+        })       
+    }) 
 })
+
