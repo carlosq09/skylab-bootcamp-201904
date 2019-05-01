@@ -10,6 +10,7 @@ import Results from '../src/components/results/results'
 
 import Register from './components/register';
 import Favorites from "./components/Favorites";
+import Navbar from "./components/Navbar";
 
 class App extends Component {
 
@@ -83,7 +84,7 @@ class App extends Component {
 
 
     return <>
-     
+        <Navbar/>
         <Favorites favs={favoriteList} giveFav={returnFavorites}/>
         <Register onRegister={handleRegister} error={error} />
         <Login onLogin={handleLogin} error={error} />
