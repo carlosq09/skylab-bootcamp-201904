@@ -4,17 +4,18 @@ import Login from './components/login/index'
 import logic from '../src/logic'
 import Search from '../src/components/search'
 import Results from '../src/components/results/results'
-
-
+import Landing from '../src/components/Landing/index'
 //components
 
 import Register from './components/register';
 import Favorites from "./components/Favorites";
 import Navbar from "./components/Navbar";
+import Populars from "./components/Populars";
+import Detail from "./components/Detail";
 
 class App extends Component {
 
-  state = { error: null, name: null, results: [] ,favoriteList :[]}
+  state = {errorSearch: null , error: null, name: null, results: [] ,favoriteList :[] , populars : [] , details:{}}
 
   handleLogin = (username, password) => {
 
@@ -53,6 +54,9 @@ class App extends Component {
      .then(response => {
        this.setState({results : response})
      })
+     .catch(response =>{
+        this.setState({errorSearch :response.message})
+     })
 
   }
 
@@ -71,25 +75,54 @@ class App extends Component {
 
   }
 
+  handlePpopular =() =>{
+
+    return logic.popularCocktails()
+    .then(response =>{
+     
+      this.setState({populars:response})
+    })
+  }
+
+  handleDetail = (id) =>{
+  
+    return logic.cocktailDetail(id)
+    .then(response =>{
+      this.setState({details : response})
+    })
+  }
+
+  componentDidMount(){
+    
+  }
+
   
   render() {
     const {
-      state: { error, results,favoriteList},
+      state: { errorSearch,error, results,favoriteList,populars ,details},
       handleLogin,
       handleRegister,
       handleSearch,
       handleFavorites,
-      returnFavorites
+      handlePpopular,
+      returnFavorites,
+      handleDetail
     } = this
 
 
     return <>
         <Navbar/>
         <Favorites favs={favoriteList} giveFav={returnFavorites}/>
+        <Landing/>
+        <button>Login</button>
+        <button>register</button>
+        <Detail detail={details}/> 
+        <Populars pops={populars} givePop={handlePpopular}  onFavorites={handleFavorites} onDetail={handleDetail}/>
+        <Favorites favs={favoriteList} giveFav={returnFavorites} onDetail={handleDetail}/>
         <Register onRegister={handleRegister} error={error} />
         <Login onLogin={handleLogin} error={error} />
-        <Search onSearch={handleSearch} error={error} />
-        <Results items={results} onFavorites={handleFavorites} />
+        <Search onSearch={handleSearch} error={errorSearch} />
+        <Results items={results} onFavorites={handleFavorites} onDetail={handleDetail} />
     </>
 
   }

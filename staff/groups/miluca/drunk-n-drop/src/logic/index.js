@@ -144,28 +144,32 @@ const logic = {
     },
 
     popularCocktails(){
-
         return cocktailApi.listPopular()
-           .then(response => {
-               if (response.length > 0){
-                   return
-               }
-               else throw new LogicError(response.error)
+            .then(({drinks}) =>{
                
-           })
+                return filter(drinks)
+            })
     },
-    
+
     cocktailbyName(query){
         validate.arguments([
             {name: 'query', value: query, type: 'string', notEmpty: false},
            ])
+           
         
         return cocktailApi.searchCocktail(query)
                  
-           .then(({drinks}) => {
-       
-                if(drinks.length) return filter(drinks)
+           .then((response) => {
+               const {drinks} = response
+
+               if(drinks.length)
+               return filter(drinks)
+
             })
+            .catch(() =>{
+                
+                throw Error('NO EXISTEN COINCIDENCIAS')
+             })
            
     
     },
@@ -175,9 +179,11 @@ const logic = {
            ])
 
         return cocktailApi.searchById(id)
+        
            .then(response => {
-               if (response.length > 0){
-                    return filter(response)
+               if (response.drinks.length > 0){
+                  
+                    return filter(response.drinks)
                }
                else throw new LogicError(response.error)
                
@@ -200,7 +206,7 @@ function filterDetails(details){
                         } 
                     })
                 })
-                console.log(drinks)
+                
                 return drinkFormater(drinks)
             })
             
