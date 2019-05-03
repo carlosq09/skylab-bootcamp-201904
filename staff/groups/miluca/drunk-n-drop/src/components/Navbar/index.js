@@ -1,12 +1,11 @@
 import React, { Component } from 'react'    
-import Mixer from '../Mixer'
 
 import '../Navbar/index.sass'
 import logo from '../Navbar/logomin.png'
 
 
 class Navbar extends Component {
-    state = { toggled: false}
+    state = { toggled: false }
 
     handleClick = () =>{
         this.setState( state => ({
@@ -33,32 +32,35 @@ class Navbar extends Component {
             Categories
             </a>
             <div class="navbar-dropdown is-boxed">
-                <a class="navbar-item" href="https://bulma.io/documentation/overview/start/">
+                <a class="navbar-item" onClick={() => this.props.categorySearch('Cocktail')} >
                 Cocktail
                 </a>
-                <a class="navbar-item" href="https://bulma.io/documentation/modifiers/syntax/">
+                <a class="navbar-item" onClick={() => this.props.categorySearch('Milk / Float / Shake')}>
                 Milk / Float / Shake
                 </a>
-                <a class="navbar-item" href="https://bulma.io/documentation/columns/basics/">
+                <a class="navbar-item" onClick={() => this.props.categorySearch('Cocoa')}>
                 Cocoa
                 </a>
-                <a class="navbar-item" href="https://bulma.io/documentation/layout/container/">
+                <a class="navbar-item" onClick={() => this.props.categorySearch('Shot')}>
                 Shot
                 </a>
-                <a class="navbar-item" href="https://bulma.io/documentation/layout/container/">
-                Coffe/Tea
+                <a class="navbar-item" onClick={() => this.props.categorySearch('Coffee / Tea')}>
+                Coffee / Tea
                 </a>
-                <a class="navbar-item" href="https://bulma.io/documentation/layout/container/">
-                Homemade Liqueour
+                <a class="navbar-item" onClick={() => this.props.categorySearch('Homemade Liqueur')}>
+                Homemade Liqueur
                 </a>
-                <a class="navbar-item" href="https://bulma.io/documentation/layout/container/">
+                <a class="navbar-item" onClick={() => this.props.categorySearch('Punch / Party Drink')}>
                 Punch / Party Drink
                 </a>
-                <a class="navbar-item" href="https://bulma.io/documentation/layout/container/">
+                <a class="navbar-item" onClick={() => this.props.categorySearch('Beer')}>
                 Beer
                 </a>
-                <a class="navbar-item" href="https://bulma.io/documentation/layout/container/">
+                <a class="navbar-item" onClick={() => this.props.categorySearch('Soft Drink / Soda')}>
                 Soft Drink / Soda
+                </a>
+                <a class="navbar-item" onClick={() => this.props.categorySearch('Other/Unknown')}>
+                Other/Unknown
                 </a>
 
             </div>

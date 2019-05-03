@@ -2,16 +2,18 @@ import { BrowserRouter as Router, Route, Link, Prompt, Switch, withRouter } from
 import React, { Component } from 'react'
 import Login from './components/login/index'
 import logic from '../src/logic'
-import Search from '../src/components/search'
-import Results from '../src/components/results/results'
-import Landing from '../src/components/Landing/index'
+/* import Search from '../src/components/search'
+import Results from '../src/components/results' */
 //components
 
-import Register from './components/register';
+import CocktailResults from './components/CocktailResults'
+import DnD from './components/DnD'
+
+
+/* import Register from './components/register';
 import Favorites from "./components/Favorites";
 import Navbar from "./components/Navbar";
-import Populars from "./components/Populars";
-import Detail from "./components/Detail";
+import Populars from "./components/Populars"; */
 
 class App extends Component {
 
@@ -111,18 +113,17 @@ class App extends Component {
 
 
     return <>
-        <Navbar/>
-        <Favorites favs={favoriteList} giveFav={returnFavorites}/>
-        <Landing/>
+        <DnD/>
+        {/* <Navbar/> */}
+{/*         <Favorites favs={favoriteList} giveFav={returnFavorites}/>
         <button>Login</button>
         <button>register</button>
-        <Detail detail={details}/> 
         <Populars pops={populars} givePop={handlePpopular}  onFavorites={handleFavorites} onDetail={handleDetail}/>
         <Favorites favs={favoriteList} giveFav={returnFavorites} onDetail={handleDetail}/>
         <Register onRegister={handleRegister} error={error} />
-        <Login onLogin={handleLogin} error={error} />
-        <Search onSearch={handleSearch} error={errorSearch} />
-        <Results items={results} onFavorites={handleFavorites} onDetail={handleDetail} />
+        <Login onLogin={handleLogin} error={error} /> */}
+        {/* <Search onSearch={handleSearch} error={errorSearch} />
+        <Results items={results} onFavorites={handleFavorites} onDetail={handleDetail} /> */}
     </>
 
   }

@@ -110,6 +110,12 @@ const logic = {
         ])
 
         return cocktailApi.searchByCategory(query)
+        .then(response =>{
+            const categories=response.drinks
+            return categoryFilter(categories)
+        })
+        
+            
     },
 
     retriveFavorites(){
@@ -122,6 +128,7 @@ const logic = {
                 const {favorites = [] } = data
                    
                  return filterDetails(favorites)
+                 
             }
 
             throw new LogicError(response.error)
@@ -234,6 +241,18 @@ function filter(drinks){
         return Promise.all(calls)
 }
 
+function categoryFilter(rawcategories){
+    let drinks=[]
+    for(let i=0 ; i<rawcategories.length ; i++){
+        drinks.push({
+            id:rawcategories[i].idDrink,
+            name:rawcategories[i].strDrink,
+            image:rawcategories[i].strDrinkThumb
+        })
+    }
+    return drinks
+}
+
 
 function drinkFormater(rawdrinks){ //array
     let drinks = []
@@ -252,7 +271,6 @@ function drinkFormater(rawdrinks){ //array
                 image: `https://www.thecocktaildb.com/images/ingredients/${drinkdetails[drinkeys[i]]}.png`
             })
         }
-
         drinks.push({
             id: drinkdetails.idDrink,
             name: drinkdetails.strDrink,
