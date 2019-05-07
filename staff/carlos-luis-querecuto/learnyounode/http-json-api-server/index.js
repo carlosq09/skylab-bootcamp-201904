@@ -1,18 +1,36 @@
-var http = require('http');
-var url = require('url');
+const http = require('http')
+const url = require('url')
 
-var server = http.createServer(function (request, response) {
-  var queryData = url.parse(request.url, true).query;
-  response.writeHead(200, {"Content-Type": "text/plain"});
+const { argv: [, , port] } = process
 
-  if (queryData.name) {
-    // user told us their name in the GET request, ex: http://host:8000/?name=Tom
-    response.end('Hello ' + queryData.name + '\n');
+const server = http.createServer((req, res) => {
+    if (req.method !== 'GET') return res.end('i can only process GET calls')
 
-  } else {
-    response.end("Hello World\n");
-  }
-});
+    if (req.url.startsWith('/api/parsetime')) {
+        const { query: { iso } } = url.parse(req.url, true)
 
-// Listen on port 8000, IP defaults to 127.0.0.1
-server.listen(8000);
+        const date = new Date(iso)
+
+        const resp = {
+            hour: date.getHours(),
+            minute: date.getMinutes(),
+            second: date.getSeconds()
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify(resp))
+    } else if (req.url.startsWith('/api/unixtime')) {
+        const { query: { iso } } = url.parse(req.url, true)
+
+        const date = new Date(iso)
+
+        const resp = {
+            unixtime: date.getTime()
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify(resp))
+    } else res.end('cannot understand this path')
+})
+
+server.listen(port)
