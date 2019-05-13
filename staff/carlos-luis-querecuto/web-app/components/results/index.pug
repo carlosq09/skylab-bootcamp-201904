@@ -1,0 +1,13 @@
+mixin results(ducks, favs = [])
+    ul
+        each item in ducks 
+            li
+                a( href=item.url)
+                    h2 #{item.title}
+                    img( src=item.image)
+                    span #{item.price}
+            form(method='post' action='/home/fav/'+item.id)
+                if favs.some(favorite =>favorite.id === item.id)
+                    button unlike   
+                else
+                    button like
